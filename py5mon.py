@@ -9,25 +9,50 @@
 # which gets me the frequencies used). http://stackoverflow.com/questions/2648151/python-frequency-detection/2649540#2649540
 #
 
+###############
+# Here are some defaults:
+
 # lenght of file to inspect each run
 frames = 1024
-
 # play out loud?
-play = True
-
-# filename
-wavfile = 'test.wav'
-
+play = False
 # debug?
 debug = False
 
+
 ###############
+from optparse import OptionParser
 import pyaudio
 import wave
 import numpy
 import sys
+import os
 
-pa = pyaudio.PyAudio ()
+parser = OptionParser (usage="%prog [-d] [-p] FILE")
+parser.add_option ("-d", "--debug", default=False, action='store_true', dest='debug', help='Enable debugging')
+parser.add_option ("-p", "--play", default=False, action='store_true', dest='play', help='Play the file out loud')
+
+(options, args) = parser.parse_args ()
+
+# filename comes as a positional argument:
+try:
+	if args[0]:
+		wavfile = args[0]
+except:
+	parser.print_help ()
+	sys.exit(1)
+if not os.path.isfile(wavfile):
+	parser.print_help ()
+	sys.exit(1)
+
+if options.debug:
+	debug = True
+if options.play:
+	play = True
+
+if play:
+	pa = pyaudio.PyAudio ()
+
 wav = wave.open (wavfile, 'rb')
 sw = wav.getsampwidth ()
 rate = wav.getframerate ()
@@ -140,8 +165,7 @@ if data and play:
 
 if play:
 	stream.close ()
-
-pa.terminate ()
+	pa.terminate ()
 
 if train:
 	dotrain (train)
