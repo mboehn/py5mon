@@ -30,6 +30,11 @@ sw = wav.getsampwidth ()
 rate = wav.getframerate ()
 window = numpy.blackman (frames)
 
+# need to remove decimals
+def numdec (x):
+	return int('{0:g}'.format(x))
+
+
 # this is to actually play the file
 if play:
 	stream = pa.open (
@@ -54,7 +59,8 @@ while len (data) == frames*sw:
 		freq = (which + x1) * rate / frames
 	else:
 		freq = which * rate / frames
-	print "Freq: %f" % (freq)
+	freq = numdec(round (freq))
+	print "Freq: %i" % (freq)
 	data = wav.readframes (frames)
 
 if data and play:
@@ -64,3 +70,5 @@ if play:
 	stream.close ()
 
 pa.terminate ()
+
+
