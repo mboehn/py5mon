@@ -25,7 +25,7 @@ debug = False
 import pyaudio
 import wave
 import numpy
-
+import sys
 
 pa = pyaudio.PyAudio ()
 wav = wave.open (wavfile, 'rb')
@@ -79,8 +79,11 @@ def dotrain (train):
 		if not tone == lasttone:
 			newtrain.append (tone)
 		lasttone = tone
+
+	for tone in newtrain:
+		sys.stdout.write(str(tone))
 	
-	print newtrain
+	sys.stdout.write("\n")
 
 
 # this is to actually play the file
