@@ -13,10 +13,13 @@
 frames = 1024
 
 # play out loud?
-play = False
+play = True
 
 # filename
 wavfile = 'test.wav'
+
+# debug?
+debug = False
 
 ###############
 import pyaudio
@@ -108,16 +111,20 @@ while len (data) == frames*sw:
 
 	tone = checkfreq (freq)
 	if tone:
-		print "Freq: %i (tone %s)" % (freq, tone)
+		if debug:
+			print "Freq: %i (tone %s)" % (freq, tone)
 		train.append (tone)
 		tone = None	
 	elif train and tone == None and tonenone == 2:
 		dotrain (train)
 		train = []
+		tonenone = 0
 	elif train and tone == None and tonenone == 0:
 		tonenone = 1
 	elif train and tone == None and tonenone == 1:
 		tonenone = 2
+	elif debug:
+		print "Freq: %i" % (freq)
 
 	data = wav.readframes (frames)
 
