@@ -155,7 +155,7 @@ while len (data) == frames*sw:
 			print "Freq: %i (tone %s)" % (freq, tone)
 		train.append (tone)
 		tone = None	
-	elif train and tone == None and tonenone == 2:
+	elif train and tone == None and tonenone == 3:
 		dotrain (train)
 		train = []
 		tonenone = 0
@@ -163,6 +163,8 @@ while len (data) == frames*sw:
 		tonenone = 1
 	elif train and tone == None and tonenone == 1:
 		tonenone = 2
+	elif train and tone == None and tonenone == 2:
+		tonenone = 3
 	elif debug:
 		print "Freq: %i" % (freq)
 
