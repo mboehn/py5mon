@@ -80,8 +80,12 @@ def dotrain (train):
 			newtrain.append (tone)
 		lasttone = tone
 
+	lasttone = None
 	for tone in newtrain:
+		if tone == 'e' and lasttone:
+			tone = lasttone
 		sys.stdout.write(str(tone))
+		lasttone = tone
 	
 	sys.stdout.write("\n")
 
