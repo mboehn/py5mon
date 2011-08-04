@@ -89,8 +89,16 @@ def checkfreq (freq):
 		tone = '0'
 	elif freq == 2400:
 		tone = 'a'
+	elif freq == 930:
+		tone = 'b'
+	elif freq == 2247:
+		tone = 'c'
+	elif freq == 991:
+		tone = 'd'
 	elif freq == 2110:
 		tone = 'e'
+	elif freq == 1055:
+		tone = 'f'
 	else:
 		return None
 	return tone
