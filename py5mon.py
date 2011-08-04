@@ -13,7 +13,7 @@
 frames = 1024
 
 # play out loud?
-play = True
+play = False
 
 # filename
 wavfile = 'test.wav'
@@ -30,9 +30,54 @@ sw = wav.getsampwidth ()
 rate = wav.getframerate ()
 window = numpy.blackman (frames)
 
+
+train = []
+tonenone = 0
 # need to remove decimals
 def numdec (x):
 	return int('{0:g}'.format(x))
+
+# look for right frequencies...
+def checkfreq (freq):
+	if freq == 1124:
+		tone = 1
+	elif freq == 1197:
+		tone = 2
+	elif freq == 1275:
+		tone = 3
+	elif freq == 1358:
+		tone = 4
+	elif freq == 1446:
+		tone = 5
+	elif freq == 1540:
+		tone = 6
+	elif freq == 1640:
+		tone = 7
+	elif freq == 1747:
+		tone = 8
+	elif freq == 1860:
+		tone = 9
+	elif freq == 1981:
+		tone = '0'
+	elif freq == 2400:
+		tone = 'a'
+	elif freq == 2110:
+		tone = 'e'
+	else:
+		return None
+	return tone
+
+# fix the train
+def dotrain (train):
+	lasttone = None
+	newtrain = []
+
+	for tone in train:
+		if not tone == lasttone:
+			newtrain.append (tone)
+		lasttone = tone
+	
+	print newtrain
 
 
 # this is to actually play the file
@@ -60,7 +105,20 @@ while len (data) == frames*sw:
 	else:
 		freq = which * rate / frames
 	freq = numdec(round (freq))
-	print "Freq: %i" % (freq)
+
+	tone = checkfreq (freq)
+	if tone:
+		print "Freq: %i (tone %s)" % (freq, tone)
+		train.append (tone)
+		tone = None	
+	elif train and tone == None and tonenone == 2:
+		dotrain (train)
+		train = []
+	elif train and tone == None and tonenone == 0:
+		tonenone = 1
+	elif train and tone == None and tonenone == 1:
+		tonenone = 2
+
 	data = wav.readframes (frames)
 
 if data and play:
@@ -71,4 +129,5 @@ if play:
 
 pa.terminate ()
 
-
+if train:
+	dotrain (train)
