@@ -102,6 +102,13 @@ def cleantrain (train):
 		btrain = newtrain[5:]
 		printtrain (atrain)
 		printtrain (btrain)
+	elif len (newtrain) == 15:
+		atrain = newtrain[:5]
+		btrain = newtrain[:5]
+		ctrain = newtrain[5:]
+		printtrain (atrain)
+		printtrain (btrain)
+		printtrain (ctrain)
 
 def printtrain (newtrain):
 	lasttone = None
