@@ -10,17 +10,6 @@
 #
 
 ###############
-# Here are some defaults:
-
-# lenght of file to inspect each run
-frames = 1024
-# play out loud?
-play = False
-# debug?
-debug = False
-
-
-###############
 from optparse import OptionParser
 import pyaudio
 import wave
@@ -33,6 +22,13 @@ parser.add_option ("-d", "--debug", default=False, action='store_true', dest='de
 parser.add_option ("-p", "--play", default=False, action='store_true', dest='play', help='Play the file out loud')
 
 (options, args) = parser.parse_args ()
+
+# lenght of file to inspect each run
+frames = 1024
+# play out loud?
+play = False
+# debug?
+debug = False
 
 # filename comes as a positional argument:
 try:
@@ -57,51 +53,37 @@ wav = wave.open (wavfile, 'rb')
 sw = wav.getsampwidth ()
 rate = wav.getframerate ()
 window = numpy.blackman (frames)
-
-
 train = []
 tonenone = 0
+
+reffreq = {}
+reffreq['1'] = 1124
+reffreq['2'] = 1197
+reffreq['3'] = 1275
+reffreq['4'] = 1358
+reffreq['5'] = 1446
+reffreq['6'] = 1540
+reffreq['7'] = 1640
+reffreq['8'] = 1747
+reffreq['9'] = 1860
+reffreq['0'] = 1981
+reffreq['a'] = 2400
+reffreq['b'] = 930
+reffreq['c'] = 2247
+reffreq['d'] = 991
+reffreq['e'] = 2110
+reffreq['f'] = 1055
+
 # need to remove decimals
 def numdec (x):
 	return int('{0:g}'.format(x))
 
 # look for right frequencies...
-def checkfreq (freq):
-	if freq == 1124:
-		tone = 1
-	elif freq == 1197:
-		tone = 2
-	elif freq == 1275:
-		tone = 3
-	elif freq == 1358:
-		tone = 4
-	elif freq == 1446:
-		tone = 5
-	elif freq == 1540:
-		tone = 6
-	elif freq == 1640:
-		tone = 7
-	elif freq == 1747:
-		tone = 8
-	elif freq == 1860:
-		tone = 9
-	elif freq == 1981:
-		tone = '0'
-	elif freq == 2400:
-		tone = 'a'
-	elif freq == 930:
-		tone = 'b'
-	elif freq == 2247:
-		tone = 'c'
-	elif freq == 991:
-		tone = 'd'
-	elif freq == 2110:
-		tone = 'e'
-	elif freq == 1055:
-		tone = 'f'
-	else:
-		return None
-	return tone
+def checkfreq (freq, reffreq):
+	for rtone, rfreq in reffreq.items():
+		if rfreq-10 <= freq and rfreq+10 >= freq:
+			return rtone
+
 
 # fix the train
 def dotrain (train):
@@ -132,7 +114,8 @@ if play:
 		format = pa.get_format_from_width (sw),
 		channels = wav.getnchannels (),
 		rate = rate,
-		output = True
+		output = True,
+		output_device_index=None,
 		)
 
 data = wav.readframes (frames)
@@ -152,7 +135,7 @@ while len (data) == frames*sw:
 		freq = which * rate / frames
 	freq = numdec(round (freq))
 
-	tone = checkfreq (freq)
+	tone = checkfreq (freq, reffreq)
 	if tone:
 		if debug:
 			print "Freq: %i (tone %s)" % (freq, tone)
