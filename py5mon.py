@@ -85,8 +85,8 @@ def checkfreq (freq, reffreq):
 			return rtone
 
 
-# fix the train
-def dotrain (train):
+# clean the train
+def cleantrain (train):
 	lasttone = None
 	newtrain = []
 
@@ -95,9 +95,15 @@ def dotrain (train):
 			newtrain.append (tone)
 		lasttone = tone
 
-	if not len (newtrain) == 5:
-		return None
-	
+	if len (newtrain) == 5:
+		printtrain (newtrain)
+	elif len (newtrain) == 10:
+		atrain = newtrain[:5]
+		btrain = newtrain[5:]
+		printtrain (atrain)
+		printtrain (btrain)
+
+def printtrain (newtrain):
 	lasttone = None
 	for tone in newtrain:
 		if tone == 'e' and lasttone:
@@ -142,7 +148,7 @@ while len (data) == frames*sw:
 		train.append (tone)
 		tone = None	
 	elif train and tone == None and tonenone == 3:
-		dotrain (train)
+		cleantrain (train)
 		train = []
 		tonenone = 0
 	elif train and tone == None and tonenone == 0:
@@ -164,4 +170,4 @@ if play:
 	pa.terminate ()
 
 if train:
-	dotrain (train)
+	cleantrain (train)
