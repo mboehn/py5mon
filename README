@@ -3,6 +3,8 @@
 py5mon is a Python script to decode CCIR (selcall, 5-tone).
 It uses pyaudio and numpy.
 
+Supports both input from WAV-files (22050Hz mono 16bit) and line-in/microphone.
+
 # Website
 https://launchpad.net/py5mon
 
