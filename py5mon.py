@@ -17,20 +17,34 @@ import numpy
 import sys
 import os
 
-parser = OptionParser (usage="%prog [-d] [-p] FILE")
+parser = OptionParser (usage="%prog [-d] [-i] [-p] FILE")
 parser.add_option ("-d", "--debug", default=False, action='store_true', dest='debug', help='Enable debugging')
 parser.add_option ("-p", "--play", default=False, action='store_true', dest='play', help='Play the file out loud')
-
+parser.add_option ("-i", "--input", default=False, action='store_true', dest='input', help='Use line-in/mic as input instead of FILE. Do not specify FILE or -p with this.')
 (options, args) = parser.parse_args ()
 
 # lenght of file to inspect each run
 frames = 1024
+
+
 # play out loud?
-play = False
+if options.play:
+	play = True
+else:
+	play = False
+
 # debug?
-debug = False
+if options.debug:
+	debug = True
+else:
+	debug = False
+
 # use mic/line-in?
-ainput = False
+if options.input:
+	ainput = True
+else:
+	ainput = False
+
 
 # filename comes as a positional argument:
 try:
@@ -42,11 +56,6 @@ except:
 if not os.path.isfile(wavfile):
 	parser.print_help ()
 	sys.exit(1)
-
-if options.debug:
-	debug = True
-if options.play:
-	play = True
 
 if play:
 	pa = pyaudio.PyAudio ()
