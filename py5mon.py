@@ -47,22 +47,37 @@ else:
 
 
 # filename comes as a positional argument:
-try:
-	if args[0]:
-		wavfile = args[0]
-except:
-	parser.print_help ()
-	sys.exit(1)
-if not os.path.isfile(wavfile):
-	parser.print_help ()
-	sys.exit(1)
+if not ainput:
+	try:
+		if args[0]:
+			wavfile = args[0]
+	except:
+		parser.print_help ()
+		sys.exit(1)
+	if not os.path.isfile(wavfile):
+		parser.print_help ()
+		sys.exit(1)
 
 if play:
 	pa = pyaudio.PyAudio ()
 
-wav = wave.open (wavfile, 'rb')
-sw = wav.getsampwidth ()
-rate = wav.getframerate ()
+if not ainput:
+	wav = wave.open (wavfile, 'rb')
+	sw = wav.getsampwidth ()
+	rate = wav.getframerate ()
+else:
+	pi = pyaudio.PyAudio ()
+	streaminput = pi.open (
+		format = pyaudio.paInt16,
+		rate = 22050,
+		channels = 1,
+		input = True,
+		frames_per_buffer = frames,
+		)
+	sw = pi.get_sample_size (pyaudio.paInt16)
+	rate = 22050
+
+
 window = numpy.blackman (frames)
 train = []
 tonenone = 0
@@ -143,7 +158,7 @@ if play:
 		)
 
 if ainput:
-	pass
+	data = streaminput.read (frames)
 else:
 	data = wav.readframes (frames)
 	
@@ -183,7 +198,7 @@ while len (data) == frames*sw:
 		print "Freq: %i" % (freq)
 
 	if ainput:
-		pass
+		data = streaminput.read (frames)
 	else:
 		data = wav.readframes (frames)
 
