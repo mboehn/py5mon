@@ -29,6 +29,8 @@ frames = 1024
 play = False
 # debug?
 debug = False
+# use mic/line-in?
+ainput = False
 
 # filename comes as a positional argument:
 try:
@@ -131,7 +133,11 @@ if play:
 		output_device_index=None,
 		)
 
-data = wav.readframes (frames)
+if ainput:
+	pass
+else:
+	data = wav.readframes (frames)
+	
 
 while len (data) == frames*sw:
 	if play:
@@ -167,7 +173,10 @@ while len (data) == frames*sw:
 	elif debug:
 		print "Freq: %i" % (freq)
 
-	data = wav.readframes (frames)
+	if ainput:
+		pass
+	else:
+		data = wav.readframes (frames)
 
 if data and play:
 	stream.write (data)
