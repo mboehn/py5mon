@@ -107,7 +107,7 @@ def numdec (x):
 # look for right frequencies...
 def checkfreq (freq, reffreq):
 	for rtone, rfreq in reffreq.items():
-		if rfreq-10 <= freq and rfreq+10 >= freq:
+		if rfreq-14 <= freq and rfreq+14 >= freq:
 			return rtone
 
 
@@ -135,6 +135,8 @@ def cleantrain (train):
 		printtrain (atrain)
 		printtrain (btrain)
 		printtrain (ctrain)
+	elif len (newtrain) == 6:
+		printtrain (newtrain)
 
 def printtrain (newtrain):
 	lasttone = None
