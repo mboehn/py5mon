@@ -15,7 +15,7 @@ import pyaudio
 import wave
 import numpy
 import sys
-import os
+import os, stat
 
 parser = OptionParser (usage="%prog [-d] [-i] [-p] FILE")
 parser.add_option ("-d", "--debug", default=False, action='store_true', dest='debug', help='Enable debugging')
@@ -54,7 +54,8 @@ if not ainput:
 	except:
 		parser.print_help ()
 		sys.exit(1)
-	if not os.path.isfile(wavfile):
+	if not os.path.isfile(wavfile) and not stat.S_ISFIFO(os.stat(wavfile).st_mode):
+		print "test"
 		parser.print_help ()
 		sys.exit(1)
 
