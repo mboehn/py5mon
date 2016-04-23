@@ -5,9 +5,6 @@ It uses pyaudio and numpy.
 
 Supports both input from WAV-files (22050Hz mono 16bit) and line-in/microphone.
 
-# Website
-https://launchpad.net/py5mon
-
 # Copyright / License
 Copyright 2011 - Mathias Bøhn Grytemark <mathias@nuxis.org>
 Licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License.
