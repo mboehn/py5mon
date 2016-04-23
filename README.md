@@ -17,3 +17,6 @@ http://creativecommons.org/licenses/by-sa/3.0/
 Thanks to Justin Peel at stackoverflow.com for some code (the important part
 which gets me the frequencies used). http://stackoverflow.com/questions/2648151/python-frequency-detection/2649540#2649540
 
+## Forks
+
+Peter Childs have done some work on using this code for decoding ZVEI as well. He's done some fixes in a branch at LaunchPad: https://code.launchpad.net/~pchilds-bcs/py5mon/zvei-dev
